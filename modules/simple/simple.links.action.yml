@@ -1,0 +1,12 @@
+entity.simple.add_form:
+  route_name: entity.simple.add_page
+  title: 'Add Simple entity'
+  appears_on:
+    - entity.simple.collection
+
+entity.simple_type.add_form:
+  route_name: entity.simple_type.add_form
+  title: 'Add Simple entity type (bundle)'
+  appears_on:
+    - entity.simple_type.collection
+

@@ -1,0 +1,12 @@
+entity.practical.add_form:
+  route_name: entity.practical.add_page
+  title: 'Add Practical entity'
+  appears_on:
+    - entity.practical.collection
+
+entity.practical_type.add_form:
+  route_name: entity.practical_type.add_form
+  title: 'Add Practical entity type (bundle)'
+  appears_on:
+    - entity.practical_type.collection
+

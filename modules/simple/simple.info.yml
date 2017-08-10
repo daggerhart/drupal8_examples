@@ -1,0 +1,5 @@
+name: Simple
+type: module
+description: Simple Entity with bundles that is much more usable than the Most Simple Entity with bundles.
+core: 8.x
+package: Custom Entities

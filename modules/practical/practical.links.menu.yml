@@ -1,0 +1,13 @@
+# Practical entity menu items definition
+entity.practical.collection:
+  title: 'Practical entity list'
+  route_name: entity.practical.collection
+  description: 'List of Practical entities'
+  parent: system.admin_content
+
+# Practical entity type menu items definition
+entity.practical_type.collection:
+  title: 'PracticalEntity Types'
+  route_name: entity.practical_type.collection
+  description: 'List of Practical entity types (bundles)'
+  parent: system.admin_structure

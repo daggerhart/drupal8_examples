@@ -1,0 +1,6 @@
+administer practical types:
+  title: 'Administer PracticalEntity types'
+  restrict access: true
+
+permission_callbacks:
+  - '\Drupal\practical\PracticalPermissionsGenerator::practicalTypePermissions'

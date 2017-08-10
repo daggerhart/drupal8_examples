@@ -1,0 +1,5 @@
+name: Most Simple
+type: module
+description: The Most Simple entity with bundles possible. Easy to create (very little code), hard to use (no links).
+core: 8.x
+package: Custom Entities

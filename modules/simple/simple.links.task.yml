@@ -1,0 +1,17 @@
+# Simple entity tasks (tabs)
+entity.simple.canonical:
+  route_name: entity.simple.canonical
+  base_route: entity.simple.canonical
+  title: 'View'
+
+entity.simple.edit_form:
+  route_name: entity.simple.edit_form
+  base_route: entity.simple.canonical
+  title: 'Edit'
+
+entity.simple.delete_form:
+  route_name:  entity.simple.delete_form
+  base_route:  entity.simple.canonical
+  title: Delete
+  weight: 10
+

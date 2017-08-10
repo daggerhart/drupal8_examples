@@ -1,0 +1,13 @@
+most_simple.most_simple_type.*:
+  type: config_entity
+  label: 'Most Simple Type settings'
+  mapping:
+    id:
+      type: string
+      label: 'Machine-readable name'
+    uuid:
+      type: stype
+      label: 'UUID'
+    label:
+      type: label
+      label: 'Label'
