@@ -1,12 +1,10 @@
-# Simple entity menu items definition
-entity.simple.collection:
+simple_entity_collection_menu:
   title: 'Simple entity list'
   route_name: entity.simple.collection
   description: 'List of Simple entities'
   parent: system.admin_content
 
-# Simple entity type menu items definition
-entity.simple_type.collection:
+simple_type_entity_collection_menu:
   title: 'SimpleEntity Types'
   route_name: entity.simple_type.collection
   description: 'List of Simple entity types (bundles)'

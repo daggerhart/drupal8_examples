@@ -1,15 +1,14 @@
-# Practical entity tasks (tabs)
-entity.practical.canonical:
+practical_entity_task_view:
   route_name: entity.practical.canonical
   base_route: entity.practical.canonical
   title: 'View'
 
-entity.practical.edit_form:
+practical_entity_task_edit:
   route_name: entity.practical.edit_form
   base_route: entity.practical.canonical
   title: 'Edit'
 
-entity.practical.delete_form:
+practical_entity_task_delete:
   route_name:  entity.practical.delete_form
   base_route:  entity.practical.canonical
   title: Delete
