@@ -1,0 +1,15 @@
+services:
+  # Event name to subscribe to
+  my_config_events_subscriber:
+    # Event subscriber class that will listen for the events.
+    class: '\Drupal\custom_events\EventSubscriber\ConfigEventsSubscriber'
+    # Tagged as an event_subscriber to register this subscriber with the event_dispatch service.
+    tags:
+      - { name: 'event_subscriber' }
+
+  custom_events_user_login:
+    class: '\Drupal\custom_events\EventSubscriber\UserLoginSubscriber'
+    arguments: ['@database', '@date.formatter']
+    tags:
+      - { name: 'event_subscriber' }
+
