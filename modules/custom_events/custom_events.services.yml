@@ -1,5 +1,5 @@
 services:
-  # Event name to subscribe to
+  # Name of this service.
   my_config_events_subscriber:
     # Event subscriber class that will listen for the events.
     class: '\Drupal\custom_events\EventSubscriber\ConfigEventsSubscriber'
@@ -7,9 +7,22 @@ services:
     tags:
       - { name: 'event_subscriber' }
 
+  # Subscriber to the event we dispatch in hook_user_login.
   custom_events_user_login:
     class: '\Drupal\custom_events\EventSubscriber\UserLoginSubscriber'
+    tags:
+      - { name: 'event_subscriber' } }
+
+  # Subscriber to the event we dispatch in hook_user_login, with dependencies injected.
+  custom_events_user_login_with_di:
+    class: '\Drupal\custom_events\EventSubscriber\UserLoginSubscriberWithDI'
     arguments: ['@database', '@date.formatter']
     tags:
       - { name: 'event_subscriber' }
 
+  # Subscriber to the config events, with dependencies injected.
+  my_config_events_subscriber_with_di:
+    class: '\Drupal\custom_events\EventSubscriber\ConfigEventsSubscriberWithDI'
+    arguments: ['@messenger']
+    tags:
+      - { name: 'event_subscriber' }

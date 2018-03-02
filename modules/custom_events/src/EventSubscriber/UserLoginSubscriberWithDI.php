@@ -2,7 +2,11 @@
 
 namespace Drupal\custom_events\EventSubscriber;
 
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\custom_events\Event\UserLoginEvent;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -10,7 +14,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @package Drupal\custom_events\EventSubscriber
  */
-class UserLoginSubscriber implements EventSubscriberInterface {
+class UserLoginSubscriberWithDI implements EventSubscriberInterface, ContainerInjectionInterface {
 
   /**
    * Database connection.
@@ -37,23 +41,43 @@ class UserLoginSubscriber implements EventSubscriberInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('database'),
+      $container->get('date.formatter')
+    );
+  }
+
+  /**
+   * UserLoginSubscriber constructor.
+   *
+   * @param \Drupal\Core\Database\Connection $database
+   *   Database connection object.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   Date formatter.
+   */
+  public function __construct(Connection $database, DateFormatterInterface $date_formatter) {
+    $this->database = $database;
+    $this->dateFormatter = $date_formatter;
+  }
+
+  /**
    * Subscribe to the user login event dispatched.
    *
    * @param \Drupal\custom_events\Event\UserLoginEvent $event
    *   Dat event object yo.
    */
   public function onUserLogin(UserLoginEvent $event) {
-    $database = \Drupal::database();
-    $dateFormatter = \Drupal::service('date.formatter');
-
-    $account_created = $database->select('users_field_data', 'ud')
+    $account_created = $this->database->select('users_field_data', 'ud')
       ->fields('ud', ['created'])
       ->condition('ud.uid', $event->account->id())
       ->execute()
       ->fetchField();
 
     drupal_set_message(t('Welcome, your account was created on %created_date.', [
-      '%created_date' => $dateFormatter->format($account_created, 'short'),
+      '%created_date' => $this->dateFormatter->format($account_created, 'short'),
     ]));
   }
 
