@@ -64,7 +64,7 @@ class UserLoginSubscriberWithDI implements EventSubscriberInterface, ContainerIn
   }
 
   /**
-   * Subscribe to the user login event dispatched.
+   * React to the user login event dispatched.
    *
    * @param \Drupal\custom_events\Event\UserLoginEvent $event
    *   Dat event object yo.

@@ -67,7 +67,7 @@ class ConfigEventsSubscriberWithDI implements EventSubscriberInterface, Containe
   }
 
   /**
-   * React to a config object being saved.
+   * React to a config object being deleted.
    *
    * @param \Drupal\Core\Config\ConfigCrudEvent $event
    *   Config crud event.
