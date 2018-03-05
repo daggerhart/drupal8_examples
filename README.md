@@ -21,3 +21,7 @@
 # The most bare-minimum possible Drupal 8 module
 
 1. [Module](modules/blank_module)
+
+# The most bare-minimum possible Drupal 8 theme
+
+1. [Theme](themes/blank_theme) - This can be enabled from the modules folder.
