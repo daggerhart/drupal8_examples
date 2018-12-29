@@ -1,0 +1,5 @@
+services:
+  cat_facts_client:
+    class: Drupal\cat_facts\CatFactsClient
+    arguments:
+      - '@http_client_factory'

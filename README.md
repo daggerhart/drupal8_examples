@@ -25,3 +25,9 @@
 # The most bare-minimum possible Drupal 8 theme
 
 1. [Theme](themes/blank_theme) - This can be enabled from the modules folder.
+
+# Cat Facts - Service, Block, Dependency Injection
+
+1. [Module](modules/cat_facts)
+1. [Original Blog Post](https://www.hook42.com/blog/consuming-json-apis-drupal-8)
+1. [Related Blog Post](https://www.daggerhart.com/guzzle-requests-json-in-drupal-8/)
