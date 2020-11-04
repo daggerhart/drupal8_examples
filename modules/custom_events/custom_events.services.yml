@@ -1,34 +1,30 @@
 services:
+  # Subscriber to the config events, with dependencies injected.
   # Name of this service.
-  my_config_events_subscriber:
+  my_config_events_subscriber_with_di:
     # Event subscriber class that will listen for the events.
-    class: '\Drupal\custom_events\EventSubscriber\ConfigEventsSubscriber'
+    class: '\Drupal\custom_events\EventSubscriber\ConfigEventsSubscriberWithDI'
+    # Inject services as "arguments"
+    arguments:
+      - '@messenger'
     # Tagged as an event_subscriber to register this subscriber with the event_dispatch service.
     tags:
       - { name: 'event_subscriber' }
 
-  # Subscriber to the event we dispatch in hook_user_login.
-  custom_events_user_login:
-    class: '\Drupal\custom_events\EventSubscriber\UserLoginSubscriber'
-    tags:
-      - { name: 'event_subscriber' }
-
+  # Some other event subscriber with dependency injection.
   another_config_events_subscriber:
     class: '\Drupal\custom_events\EventSubscriber\AnotherConfigEventsSubscriber'
+    arguments:
+      - '@messenger'
     tags:
       - { name: 'event_subscriber' }
 
   # Subscriber to the event we dispatch in hook_user_login, with dependencies injected.
   custom_events_user_login_with_di:
     class: '\Drupal\custom_events\EventSubscriber\UserLoginSubscriberWithDI'
-    arguments: ['@database', '@date.formatter']
+    arguments:
+      - '@database'
+      - '@date.formatter'
+      - '@messenger'
     tags:
       - { name: 'event_subscriber' }
-
-# todo - Requires Drupal 8.5+ for the messenger service
-#   Subscriber to the config events, with dependencies injected.
-#  my_config_events_subscriber_with_di:
-#    class: '\Drupal\custom_events\EventSubscriber\ConfigEventsSubscriberWithDI'
-#    arguments: ['@messenger']
-#    tags:
-#      - { name: 'event_subscriber' }

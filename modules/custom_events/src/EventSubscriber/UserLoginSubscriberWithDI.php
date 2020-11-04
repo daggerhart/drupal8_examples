@@ -5,6 +5,7 @@ namespace Drupal\custom_events\EventSubscriber;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\custom_events\Event\UserLoginEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -31,6 +32,13 @@ class UserLoginSubscriberWithDI implements EventSubscriberInterface, ContainerIn
   protected $dateFormatter;
 
   /**
+   * Messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
@@ -46,7 +54,8 @@ class UserLoginSubscriberWithDI implements EventSubscriberInterface, ContainerIn
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('database'),
-      $container->get('date.formatter')
+      $container->get('date.formatter'),
+      $container->get('messenger')
     );
   }
 
@@ -58,9 +67,10 @@ class UserLoginSubscriberWithDI implements EventSubscriberInterface, ContainerIn
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   Date formatter.
    */
-  public function __construct(Connection $database, DateFormatterInterface $date_formatter) {
+  public function __construct(Connection $database, DateFormatterInterface $date_formatter, MessengerInterface $messenger) {
     $this->database = $database;
     $this->dateFormatter = $date_formatter;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -76,7 +86,7 @@ class UserLoginSubscriberWithDI implements EventSubscriberInterface, ContainerIn
       ->execute()
       ->fetchField();
 
-    drupal_set_message(t('Welcome, your account was created on %created_date.', [
+    $this->messenger->addStatus(t('Welcome, your account was created on %created_date.', [
       '%created_date' => $this->dateFormatter->format($account_created, 'short'),
     ]));
   }

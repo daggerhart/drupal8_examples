@@ -40,7 +40,7 @@ class ConfigEventsSubscriberWithDI implements EventSubscriberInterface, Containe
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return static(
+    return new static(
       $container->get('messenger')
     );
   }
@@ -48,7 +48,7 @@ class ConfigEventsSubscriberWithDI implements EventSubscriberInterface, Containe
   /**
    * ConfigEventsSubscriberWithDI constructor.
    *
-   * @param \Drupal\custom_events\EventSubscriber\MessengerInterface $messenger
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   Messenger service injected during the static create() method.
    */
   public function __construct(MessengerInterface $messenger) {
