@@ -4,6 +4,11 @@ namespace Drupal\cat_facts;
 
 use Drupal\Component\Serialization\Json;
 
+/**
+ * Class CatFactsClient.
+ *
+ * @package Drupal\cat_facts
+ */
 class CatFactsClient {
 
   /**

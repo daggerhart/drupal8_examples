@@ -1,3 +1,5 @@
 name: Cat Facts
-core: 8.x
 type: module
+description: Example JSON API consumption in Drupal
+core_version_requirement: ^8.8 || ^9
+package: Custom
