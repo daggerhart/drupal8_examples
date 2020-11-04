@@ -25,11 +25,11 @@ class PracticalEntityForm extends ContentEntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        drupal_set_message($this->t('Created the %bundle_label - %content_entity_label entity:  %entity_label.', $message_params ));
+        $this->messenger()->addStatus($this->t('Created the %bundle_label - %content_entity_label entity:  %entity_label.', $message_params ));
         break;
 
       default:
-        drupal_set_message($this->t('Saved the %bundle_label - %content_entity_label entity:  %entity_label.', $message_params));
+        $this->messenger()->addStatus($this->t('Saved the %bundle_label - %content_entity_label entity:  %entity_label.', $message_params));
     }
 
     $content_entity_id = $entity->getEntityType()->id();
