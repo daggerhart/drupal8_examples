@@ -1,0 +1,10 @@
+services:
+
+  # Factory service
+  calculator_factory:
+    class: \Drupal\calculator\Service\CalculatorFactory
+
+  # Service instantiated by factory.
+  global_calculator:
+    class: \Drupal\calculator\Service\Calculator
+    factory: ['@calculator_factory', 'createCalculator']

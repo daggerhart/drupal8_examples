@@ -1,0 +1,5 @@
+name: Calculator
+type: module
+description: Example module that uses lots of ideas around services.
+core_version_requirement: ^8.8 || ^9
+package: Custom

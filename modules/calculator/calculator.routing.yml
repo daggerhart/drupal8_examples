@@ -1,0 +1,7 @@
+calculator.sandbox:
+  path: 'calculator'
+  defaults:
+    _controller: '\Drupal\calculator\Controller\CalculatorSandbox::page'
+    _title: 'Calculator Sandbox'
+  requirements:
+    _permission: 'access content'
