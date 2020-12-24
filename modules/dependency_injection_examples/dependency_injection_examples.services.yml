@@ -1,0 +1,23 @@
+services:
+
+  # Very basic example of a service that we can use.
+  awesome_markup_creator:
+    class: \Drupal\dependency_injection_examples\AwesomeMarkupCreator
+
+  # Impractical example to illustrate what arguments are.
+  my_service_with_arguments:
+    class: \Drupal\dependency_injection_examples\ServiceWithArguments
+    arguments:
+      - 'hello'
+      - 17
+
+  # Practical example of injecting other services as dependencies into our new
+  # service using arguments.
+  # AKA: "Wiring" services, specifically "Manual Wiring".
+  my_service_with_wired_services:
+    class: \Drupal\dependency_injection_examples\ServiceWithWiredServices
+    arguments:
+      - '@awesome_markup_creator'
+      - '@my_service_with_arguments'
+      - '@messenger'
+      - '@logger.factory'

@@ -1,0 +1,15 @@
+controller_with_dependency_injection:
+  path: 'dependency-injection-controller'
+  defaults:
+    _controller: \Drupal\dependency_injection_examples\Controller\ControllerWithDependencyInjection::page
+    _title: 'Dependency Injection into Controller'
+  requirements:
+    _permission: 'access content'
+
+form_with_dependency_injection:
+  path: 'dependency-injection-form'
+  defaults:
+    _form: \Drupal\dependency_injection_examples\Form\FormWithDependencyInjection
+    _title: 'Dependency Injection into Form'
+  requirements:
+    _permission: 'access content'
