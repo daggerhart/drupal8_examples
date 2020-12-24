@@ -4,9 +4,7 @@ namespace Drupal\custom_events\EventSubscriber;
 
 use Drupal\Core\Config\ConfigCrudEvent;
 use Drupal\Core\Config\ConfigEvents;
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Messenger\MessengerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -14,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @package Drupal\custom_events\EventSubscriber
  */
-class ConfigEventsSubscriberWithDI implements EventSubscriberInterface, ContainerInjectionInterface {
+class ConfigEventsSubscriberWithDI implements EventSubscriberInterface {
 
   /**
    * Messenger service.
@@ -22,6 +20,16 @@ class ConfigEventsSubscriberWithDI implements EventSubscriberInterface, Containe
    * @var \Drupal\Core\Messenger\MessengerInterface
    */
   public $messenger;
+
+  /**
+   * ConfigEventsSubscriberWithDI constructor.
+   *
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   Messenger service injected during the static create() method.
+   */
+  public function __construct(MessengerInterface $messenger) {
+    $this->messenger = $messenger;
+  }
 
   /**
    * {@inheritdoc}
@@ -37,25 +45,6 @@ class ConfigEventsSubscriberWithDI implements EventSubscriberInterface, Containe
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('messenger')
-    );
-  }
-
-  /**
-   * ConfigEventsSubscriberWithDI constructor.
-   *
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   Messenger service injected during the static create() method.
-   */
-  public function __construct(MessengerInterface $messenger) {
-    $this->messenger = $messenger;
-  }
-
-  /**
    * React to a config object being saved.
    *
    * @param \Drupal\Core\Config\ConfigCrudEvent $event
@@ -63,7 +52,7 @@ class ConfigEventsSubscriberWithDI implements EventSubscriberInterface, Containe
    */
   public function configSave(ConfigCrudEvent $event) {
     $config = $event->getConfig();
-    $this->messenger->addStatus('Saved config: ' . $config->getName());
+    $this->messenger->addStatus(__CLASS__ . ' - Saved config: ' . $config->getName());
   }
 
   /**
@@ -74,7 +63,7 @@ class ConfigEventsSubscriberWithDI implements EventSubscriberInterface, Containe
    */
   public function configDelete(ConfigCrudEvent $event) {
     $config = $event->getConfig();
-    $this->messenger->addStatus('Deleted config: ' . $config->getName());
+    $this->messenger->addStatus(__CLASS__ . ' - Deleted config: ' . $config->getName());
   }
 
 }

@@ -4,10 +4,8 @@ namespace Drupal\custom_events\EventSubscriber;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\custom_events\Event\UserLoginEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -15,7 +13,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @package Drupal\custom_events\EventSubscriber
  */
-class UserLoginSubscriberWithDI implements EventSubscriberInterface, ContainerInjectionInterface {
+class UserLoginSubscriberWithDI implements EventSubscriberInterface {
 
   /**
    * Database connection.
@@ -39,27 +37,6 @@ class UserLoginSubscriberWithDI implements EventSubscriberInterface, ContainerIn
   protected $messenger;
 
   /**
-   * {@inheritdoc}
-   */
-  public static function getSubscribedEvents() {
-    return [
-      // Static class constant => method on this class.
-      UserLoginEvent::EVENT_NAME => 'onUserLogin',
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('database'),
-      $container->get('date.formatter'),
-      $container->get('messenger')
-    );
-  }
-
-  /**
    * UserLoginSubscriber constructor.
    *
    * @param \Drupal\Core\Database\Connection $database
@@ -71,6 +48,16 @@ class UserLoginSubscriberWithDI implements EventSubscriberInterface, ContainerIn
     $this->database = $database;
     $this->dateFormatter = $date_formatter;
     $this->messenger = $messenger;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getSubscribedEvents() {
+    return [
+      // Static class constant => method on this class.
+      UserLoginEvent::EVENT_NAME => 'onUserLogin',
+    ];
   }
 
   /**
@@ -86,7 +73,7 @@ class UserLoginSubscriberWithDI implements EventSubscriberInterface, ContainerIn
       ->execute()
       ->fetchField();
 
-    $this->messenger->addStatus(t('Welcome, your account was created on %created_date.', [
+    $this->messenger->addStatus(t(__CLASS__ . ' - Welcome, your account was created on %created_date.', [
       '%created_date' => $this->dateFormatter->format($account_created, 'short'),
     ]));
   }
