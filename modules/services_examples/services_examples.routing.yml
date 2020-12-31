@@ -1,0 +1,7 @@
+password_generator_sandbox:
+  path: 'password-generator'
+  defaults:
+    _controller: \Drupal\services_examples\Controller\PasswordGeneratorSandbox::page
+    _title: 'Password Generator'
+  requirements:
+    _permission: 'access content'

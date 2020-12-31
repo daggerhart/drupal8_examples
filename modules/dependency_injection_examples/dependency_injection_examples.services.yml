@@ -21,3 +21,13 @@ services:
       - '@my_service_with_arguments'
       - '@messenger'
       - '@logger.factory'
+
+  # Example of injecting dependencies using a Setter on the service class.
+  my_service_with_setter_injection:
+    class: \Drupal\dependency_injection_examples\SetterInjectionExample
+    arguments:
+      - '@my_service_with_arguments'
+    calls:
+      - ['setAwesomeMarkupCreator', ['@awesome_markup_creator'] ]
+      - ['setLogger', ['@logger.factory'] ]
+      - ['setMessenger', ['@messenger'] ]
