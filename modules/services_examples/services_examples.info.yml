@@ -3,3 +3,4 @@ type: module
 description: Module with examples of various service related ideas.
 core_version_requirement: ^8.8 || ^9
 package: Custom
+configure: password_generator.sandbox

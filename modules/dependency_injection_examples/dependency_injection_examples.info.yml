@@ -3,3 +3,4 @@ type: module
 description: Example module that uses lots of ideas around dependency injection.
 core_version_requirement: ^8.8 || ^9
 package: Custom
+configure: controller_with_dependency_injection

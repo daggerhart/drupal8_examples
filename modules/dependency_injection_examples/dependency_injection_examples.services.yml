@@ -11,6 +11,13 @@ services:
       - 'hello'
       - 17
 
+  # Example to illustrate that the same class can be used with different arguments.
+  my_other_service_with_arguments:
+    class: \Drupal\dependency_injection_examples\ServiceWithArguments
+    arguments:
+      - 'another example'
+      - 'with different arguments'
+
   # Practical example of injecting other services as dependencies into our new
   # service using arguments.
   # AKA: "Wiring" services, specifically "Manual Wiring".
@@ -26,7 +33,7 @@ services:
   my_service_with_setter_injection:
     class: \Drupal\dependency_injection_examples\SetterInjectionExample
     arguments:
-      - '@my_service_with_arguments'
+      - '@my_other_service_with_arguments'
     calls:
       - ['setAwesomeMarkupCreator', ['@awesome_markup_creator'] ]
       - ['setLogger', ['@logger.factory'] ]

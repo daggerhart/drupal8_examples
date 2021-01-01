@@ -1,27 +1,29 @@
 services:
 
   # Very simple service that generates simple passwords.
-  basic_password_generator:
-    class: \Drupal\services_examples\BasicPasswordGenerator
+  password_generator_simple:
+    class: \Drupal\services_examples\PasswordGeneratorSimple
 
   ## -- Service Definition inheritance --
 
   # Abstract password generator who's service definition should be inherited
   # by other services.
-  better_password_generator_base:
+  password_generator_abstract_base:
     abstract: true
-    class: \Drupal\services_examples\BetterPasswordGeneratorBase
+    class: \Drupal\services_examples\PasswordGeneratorAbstractBase
     arguments:
       - '@messenger'
     calls:
       - ['setLogger', ['@logger.factory'] ]
 
   # Better password generated with cryptographically secure random numbers.
-  crypto_secure_password_generator:
-    class: \Drupal\services_examples\CryptoSecurePasswordGenerator
-    parent: better_password_generator_base
+  # Inherits 'arguments' and 'calls' from parent service definition.
+  password_generator_crypto_secure:
+    class: \Drupal\services_examples\PasswordGeneratorCryptoSecure
+    parent: password_generator_abstract_base
 
   # Better password generator that only uses unambiguous characters.
-  unambiguous_password_generator:
-    class: \Drupal\services_examples\UnambiguousCryptoSecurePasswordGenerator
-    parent: crypto_secure_password_generator
+  # Inherits 'arguments' and 'calls' from parent service definition.
+  password_generator_unambiguous:
+    class: \Drupal\services_examples\PasswordGeneratorUnambiguous
+    parent: password_generator_abstract_base

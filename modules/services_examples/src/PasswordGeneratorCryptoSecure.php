@@ -4,7 +4,12 @@ namespace Drupal\services_examples;
 
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
-class CryptoSecurePasswordGenerator extends BetterPasswordGeneratorBase {
+/**
+ * Class PasswordGeneratorCryptoSecure.
+ *
+ * @package Drupal\services_examples
+ */
+class PasswordGeneratorCryptoSecure extends PasswordGeneratorAbstractBase {
 
   /**
    * {@inheritDoc}

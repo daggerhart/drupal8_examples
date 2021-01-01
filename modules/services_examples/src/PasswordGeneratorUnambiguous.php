@@ -4,7 +4,12 @@ namespace Drupal\services_examples;
 
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
-class UnambiguousCryptoSecurePasswordGenerator extends CryptoSecurePasswordGenerator {
+/**
+ * Class PasswordGeneratorUnambiguous.
+ *
+ * @package Drupal\services_examples
+ */
+class PasswordGeneratorUnambiguous extends PasswordGeneratorCryptoSecure {
 
   /**
    * {@inheritDoc}

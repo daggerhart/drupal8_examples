@@ -6,7 +6,12 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
-abstract class BetterPasswordGeneratorBase {
+/**
+ * Class PasswordGeneratorAbstractBase.
+ *
+ * @package Drupal\services_examples
+ */
+abstract class PasswordGeneratorAbstractBase {
 
   use StringTranslationTrait;
 

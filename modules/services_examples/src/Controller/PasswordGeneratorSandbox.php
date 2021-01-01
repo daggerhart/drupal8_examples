@@ -4,9 +4,9 @@ namespace Drupal\services_examples\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Markup;
-use Drupal\services_examples\BasicPasswordGenerator;
-use Drupal\services_examples\CryptoSecurePasswordGenerator;
-use Drupal\services_examples\UnambiguousCryptoSecurePasswordGenerator;
+use Drupal\services_examples\PasswordGeneratorSimple;
+use Drupal\services_examples\PasswordGeneratorCryptoSecure;
+use Drupal\services_examples\PasswordGeneratorUnambiguous;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -17,17 +17,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class PasswordGeneratorSandbox extends ControllerBase {
 
   /**
-   * @var \Drupal\services_examples\BasicPasswordGenerator
+   * @var \Drupal\services_examples\PasswordGeneratorSimple
    */
-  protected $basic;
+  protected $simple;
 
   /**
-   * @var \Drupal\services_examples\CryptoSecurePasswordGenerator
+   * @var \Drupal\services_examples\PasswordGeneratorCryptoSecure
    */
   protected $crypto;
 
   /**
-   * @var \Drupal\services_examples\UnambiguousCryptoSecurePasswordGenerator
+   * @var \Drupal\services_examples\PasswordGeneratorUnambiguous
    */
   protected $unambiguous;
 
@@ -36,27 +36,27 @@ class PasswordGeneratorSandbox extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('basic_password_generator'),
-      $container->get('crypto_secure_password_generator'),
-      $container->get('unambiguous_password_generator')
+      $container->get('password_generator_simple'),
+      $container->get('password_generator_crypto_secure'),
+      $container->get('password_generator_unambiguous')
     );
   }
 
   /**
    * PasswordGeneratorSandbox constructor.
    *
-   * @param \Drupal\services_examples\BasicPasswordGenerator $basic_password_generator
-   * @param \Drupal\services_examples\CryptoSecurePasswordGenerator $crypto_secure_password_generator
-   * @param \Drupal\services_examples\UnambiguousCryptoSecurePasswordGenerator $unambiguous_crypto_secure_password_generator
+   * @param \Drupal\services_examples\PasswordGeneratorSimple $password_generator_simple
+   * @param \Drupal\services_examples\PasswordGeneratorCryptoSecure $password_generator_crypto_secure
+   * @param \Drupal\services_examples\PasswordGeneratorUnambiguous $password_generator_unambiguous_crypto_secure
    */
   public function __construct(
-    BasicPasswordGenerator $basic_password_generator,
-    CryptoSecurePasswordGenerator $crypto_secure_password_generator,
-    UnambiguousCryptoSecurePasswordGenerator $unambiguous_crypto_secure_password_generator
+    PasswordGeneratorSimple $password_generator_simple,
+    PasswordGeneratorCryptoSecure $password_generator_crypto_secure,
+    PasswordGeneratorUnambiguous $password_generator_unambiguous_crypto_secure
   ) {
-    $this->basic = $basic_password_generator;
-    $this->crypto = $crypto_secure_password_generator;
-    $this->unambiguous = $unambiguous_crypto_secure_password_generator;
+    $this->simple = $password_generator_simple;
+    $this->crypto = $password_generator_crypto_secure;
+    $this->unambiguous = $password_generator_unambiguous_crypto_secure;
   }
 
   /**
@@ -67,7 +67,7 @@ class PasswordGeneratorSandbox extends ControllerBase {
       'password' => [
         '#markup' => Markup::create("
           <h2>Basic Password</h2>
-          <pre>{$this->basic->generatePassword()}</pre>
+          <pre>{$this->simple->generatePassword()}</pre>
         "),
       ],
       'crypto' => [

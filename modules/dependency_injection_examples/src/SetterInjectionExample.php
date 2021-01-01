@@ -59,7 +59,7 @@ class SetterInjectionExample {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
    */
   public function setLogger(LoggerChannelFactoryInterface $logger_channel_factory) {
-    $this->logger = $logger_channel_factory->get('injected');
+    $this->logger = $logger_channel_factory->get('di_injected');
   }
 
   /**
@@ -69,6 +69,16 @@ class SetterInjectionExample {
    */
   public function setMessenger(MessengerInterface $messenger) {
     $this->messenger = $messenger;
+  }
+
+  /**
+   * Use the messenger service to output the arguments from our service.
+   */
+  public function messageServiceArgumentsAsMarkup() {
+    $this->messenger->addStatus('Message and arguments using our injected services:');
+    $arguments = $this->serviceWithArguments->getArguments();
+    $message = $this->awesomeMarkupCreator->makeMarkup($arguments);
+    $this->messenger->addStatus($message);
   }
 
 }

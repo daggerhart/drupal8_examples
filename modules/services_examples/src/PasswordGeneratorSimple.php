@@ -2,7 +2,12 @@
 
 namespace Drupal\services_examples;
 
-class BasicPasswordGenerator {
+/**
+ * Class PasswordGeneratorSimple.
+ *
+ * @package Drupal\services_examples
+ */
+class PasswordGeneratorSimple {
 
   /**
    * Generate a password.

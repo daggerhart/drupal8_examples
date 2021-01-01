@@ -1,4 +1,4 @@
-password_generator_sandbox:
+password_generator.sandbox:
   path: 'password-generator'
   defaults:
     _controller: \Drupal\services_examples\Controller\PasswordGeneratorSandbox::page
