@@ -2,13 +2,14 @@
 
 namespace Drupal\cookie_services\Form;
 
+use Drupal\cookie_services\CookieServiceInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\cookie_services\CookieServiceSimple;
+use Drupal\Core\Render\Markup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class CookieServiceSimpleForm.
+ * Class CookieServiceSandbox.
  *
  * @package Drupal\cookie_services\Form
  */
@@ -17,18 +18,40 @@ class CookieServiceSandbox extends FormBase {
   /**
    * Our simple cookie service that counts requests.
    *
-   * @var \Drupal\cookie_services\CookieServiceSimple
+   * @var \Drupal\cookie_services\CookieServiceInterface
    */
   protected $cookieServiceSimple;
 
   /**
+   * Our complex cookie service.
+   *
+   * @var \Drupal\cookie_services\CookieServiceInterface
+   */
+  protected $cookieServiceComplex;
+
+  /**
+   * @var \Drupal\cookie_services\CookieServiceInterface
+   */
+  protected $anotherCookieServiceComplex;
+
+  /**
    * CookieServiceSimpleForm constructor.
    *
-   * @param \Drupal\cookie_services\CookieServiceSimple $cookie_service_simple
+   * @param \Drupal\cookie_services\CookieServiceInterface $cookie_service_simple
    *   Simple cookie service.
+   * @param \Drupal\cookie_services\CookieServiceInterface $cookie_service_complex
+   *   Complex cookie service.
+   * @param \Drupal\cookie_services\CookieServiceInterface $another_cookie_service_complex
+   *   Another complex cookie
    */
-  public function __construct(CookieServiceSimple $cookie_service_simple) {
+  public function __construct(
+    CookieServiceInterface $cookie_service_simple,
+    CookieServiceInterface $cookie_service_complex,
+    CookieServiceInterface $another_cookie_service_complex
+  ) {
     $this->cookieServiceSimple = $cookie_service_simple;
+    $this->cookieServiceComplex = $cookie_service_complex;
+    $this->anotherCookieServiceComplex = $another_cookie_service_complex;
   }
 
   /**
@@ -36,7 +59,9 @@ class CookieServiceSandbox extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('cookie_service_simple')
+      $container->get('cookie_service_simple'),
+      $container->get('cookie_service_complex'),
+      $container->get('another_cookie_service_complex')
     );
   }
 
@@ -44,7 +69,7 @@ class CookieServiceSandbox extends FormBase {
    * {@inheritDoc}
    */
   public function getFormId() {
-    return 'cookie_service_simple_form';
+    return 'cookie_service_sandbox_form';
   }
 
   /**
@@ -75,6 +100,52 @@ class CookieServiceSandbox extends FormBase {
       ],
     ];
 
+    $complex_data = print_r($this->cookieServiceComplex->getCookieValue(), 1);
+    $form['complex'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t("Complex Cookie - {$this->cookieServiceComplex->getCookieName()} - Random Data"),
+      'current_value' => [
+        '#markup' => Markup::create("
+          Current Value:<br>
+          <pre>{$complex_data}</pre>
+        "),
+      ],
+      'actions' => [
+        '#type' => 'actions',
+        'set_complex_cookie_value' => [
+          '#type' => 'submit',
+          '#value' => $this->t("Set New Complex Cookie Value - {$this->cookieServiceComplex->getCookieName()}"),
+        ],
+        'delete_complex_cookie' => [
+          '#type' => 'submit',
+          '#value' => $this->t("Delete Complex Cookie - {$this->cookieServiceComplex->getCookieName()}"),
+        ],
+      ],
+    ];
+
+    $another_complex_data = print_r($this->anotherCookieServiceComplex->getCookieValue(), 1);
+    $form['another_complex'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t("Complex Cookie - {$this->anotherCookieServiceComplex->getCookieName()} - Random Data"),
+      'current_value' => [
+        '#markup' => Markup::create("
+          Current Value:<br>
+          <pre>{$another_complex_data}</pre>
+        "),
+      ],
+      'actions' => [
+        '#type' => 'actions',
+        'set_another_complex_cookie_value' => [
+          '#type' => 'submit',
+          '#value' => $this->t("Set New Complex Cookie Value - {$this->anotherCookieServiceComplex->getCookieName()}"),
+        ],
+        'delete_another_complex_cookie' => [
+          '#type' => 'submit',
+          '#value' => $this->t("Delete Complex Cookie - {$this->anotherCookieServiceComplex->getCookieName()}"),
+        ],
+      ],
+    ];
+
     return $form;
   }
 
@@ -90,14 +161,46 @@ class CookieServiceSandbox extends FormBase {
 
     switch ($trigger_button) {
       case 'set_simple_cookie_value':
-        $this->messenger()->addStatus('Setting new cookie value.');
+        $this->messenger()->addStatus('Setting new simple cookie value.');
         $new_value = $form_state->getValue('new_value') ?? 0;
         $this->cookieServiceSimple->setCookieValue($new_value);
         break;
 
       case 'delete_simple_cookie':
-        $this->messenger()->addStatus('Deleting cookie.');
+        $this->messenger()->addStatus('Deleting simple cookie.');
         $this->cookieServiceSimple->setShouldDeleteCookie(TRUE);
+        break;
+
+      case 'set_complex_cookie_value':
+        $this->messenger()->addStatus("Setting new complex cookie value for {$this->cookieServiceComplex->getCookieName()}.");
+        $value = [
+          'some_value' => random_int(0, random_int(100, 1000000)),
+          'another_value' => random_int(0, random_int(100, 1000000)),
+          'again' => random_int(0, random_int(100, 1000000)),
+          'more' => random_int(0, random_int(100, 1000000)),
+        ];
+        $this->cookieServiceComplex->setCookieValue($value);
+        break;
+
+      case 'delete_complex_cookie':
+        $this->messenger()->addStatus("Deleting complex cookie {$this->cookieServiceComplex->getCookieName()}.");
+        $this->cookieServiceComplex->setShouldDeleteCookie(TRUE);
+        break;
+
+      case 'set_another_complex_cookie_value':
+        $this->messenger()->addStatus("Setting new complex cookie value for {$this->anotherCookieServiceComplex->getCookieName()}.");
+        $value = [
+          'first' => random_int(0, random_int(100, 1000000)),
+          'last' => random_int(0, random_int(100, 1000000)),
+          'city' => random_int(0, random_int(100, 1000000)),
+          'state' => random_int(0, random_int(100, 1000000)),
+        ];
+        $this->anotherCookieServiceComplex->setCookieValue($value);
+        break;
+
+      case 'delete_another_complex_cookie':
+        $this->messenger()->addStatus("Deleting complex cookie {$this->anotherCookieServiceComplex->getCookieName()}.");
+        $this->anotherCookieServiceComplex->setShouldDeleteCookie(TRUE);
         break;
     }
   }

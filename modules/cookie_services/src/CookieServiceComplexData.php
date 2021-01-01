@@ -2,22 +2,18 @@
 
 namespace Drupal\cookie_services;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\Component\Serialization\SerializationInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Class CookieServiceSimple.
+ * Class CookieServiceComplexData.
  *
- * Count the number of requests this visitor has made and store the value as a
- * cookie in the visitor's browser.
- *
- * @package Drupal\services_examples
+ * @package Drupal\cookie_services
  */
-class CookieServiceSimple implements CookieServiceInterface {
+class CookieServiceComplexData implements CookieServiceInterface {
 
   /**
    * Name of the cookie this service will manage.
@@ -32,6 +28,13 @@ class CookieServiceSimple implements CookieServiceInterface {
    * @var \Symfony\Component\HttpFoundation\Request|null
    */
   protected $request;
+
+  /**
+   * Json serialization service.
+   *
+   * @var \Drupal\Component\Serialization\SerializationInterface
+   */
+  protected $json;
 
   /**
    * The cookie value that will be set during the respond event.
@@ -59,10 +62,12 @@ class CookieServiceSimple implements CookieServiceInterface {
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Core request stack.
+   * @param \Drupal\Component\Serialization\SerializationInterface $json
+   *   Json serialization service.
    */
-  public function __construct(RequestStack $request_stack) {
-    $this->setCookieName('request_count');
+  public function __construct(RequestStack $request_stack, SerializationInterface $json) {
     $this->request = $request_stack->getCurrentRequest();
+    $this->json = $json;
   }
 
   /**
@@ -80,10 +85,7 @@ class CookieServiceSimple implements CookieServiceInterface {
   }
 
   /**
-   * Get the cookie's value.
-   *
-   * @return mixed
-   *   Cookie value.
+   * {@inheritDoc}
    */
   public function getCookieValue() {
     // If we're mid-request and setting a new cookie value, return it. This
@@ -92,13 +94,19 @@ class CookieServiceSimple implements CookieServiceInterface {
       return $this->newCookieValue;
     }
 
-    return $this->request->cookies->get($this->getCookieName());
+    // Get the value from the cookie and attempt to decode it.
+    $value = $this->request->cookies->get($this->getCookieName());
+
+    try {
+      $value = $this->json->decode($value);
+    }
+    catch (\Exception $exception) {}
+
+    return $value;
   }
 
   /**
-   * Set the cookie's new value.
-   *
-   * @param int|string $value
+   * {@inheritDoc}
    */
   public function setCookieValue($value) {
     $this->shouldUpdateCookie = TRUE;
@@ -106,30 +114,21 @@ class CookieServiceSimple implements CookieServiceInterface {
   }
 
   /**
-   * Get the "should update cookie" flag.
-   *
-   * @return bool
-   *   Whether or not the cookie should be updated during the response event.
+   * {@inheritDoc}
    */
   public function getShouldUpdateCookie() {
     return $this->shouldUpdateCookie;
   }
 
   /**
-   * Get the "should delete cookie" flag.
-   *
-   * @return bool
-   *   Whether or not the cookie should be deleted during the response event.
+   * {@inheritDoc}
    */
   public function getShouldDeleteCookie() {
     return $this->shouldDeleteCookie;
   }
 
   /**
-   * Set the "should delete cookie" flag.
-   *
-   * @param bool $delete_cookie
-   *   Whether the cookie should be deleted during the response event.
+   * {@inheritDoc}
    */
   public function setShouldDeleteCookie(bool $delete_cookie = TRUE) {
     $this->shouldDeleteCookie = $delete_cookie;
@@ -140,27 +139,8 @@ class CookieServiceSimple implements CookieServiceInterface {
    */
   public static function getSubscribedEvents() {
     return [
-      KernelEvents::REQUEST => 'onRequest',
       KernelEvents::RESPONSE => 'onResponse',
     ];
-  }
-
-  /**
-   * React to the symfony kernel request event.
-   *
-   * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
-   *   The event to process.
-   */
-  public function onRequest(RequestEvent $event) {
-    if (!$event->isMasterRequest()) {
-      // The request event can fire more than once. Don't do anything if it's
-      // not the master request.
-      return;
-    }
-
-    $value = $this->getCookieValue();
-    $value = (int) $value + 1;
-    $this->setCookieValue($value);
   }
 
   /**
@@ -174,9 +154,14 @@ class CookieServiceSimple implements CookieServiceInterface {
 
     // If the cookie should be updated, add new cookie in the response headers.
     if ($this->getShouldUpdateCookie()) {
+      $value = $this->getCookieValue();
+      if (is_array($value) || is_object($value)) {
+        $value = $this->json->encode((array) $value);
+      }
+
       $response->headers->setCookie(new Cookie(
         $this->getCookieName(),
-        $this->getCookieValue()
+        $value
       ));
     }
 
