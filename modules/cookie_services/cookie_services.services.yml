@@ -30,3 +30,11 @@ services:
       - ['setCookieName', ['some_other_cookie']]
     tags:
       - { name: 'event_subscriber' }
+
+  # Example custom cache context for our complex cookie data.
+  cache_context.another_cookie_service_complex_city:
+    class: \Drupal\cookie_services\Cache\Context\CookieServiceComplexCacheContext
+    arguments:
+      - '@another_cookie_service_complex'
+    tags:
+      - { name: cache_context }
