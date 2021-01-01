@@ -2,6 +2,11 @@
 
 namespace Drupal\services_examples;
 
+/**
+ * Interface PasswordGeneratorInterface.
+ *
+ * @package Drupal\services_examples
+ */
 interface PasswordGeneratorInterface {
 
   /**
@@ -11,6 +16,6 @@ interface PasswordGeneratorInterface {
    *
    * @return string
    */
-  public function generatePassword($length, $allowed_sets = []);
+  public function generatePassword($length = 16, $allowed_sets = []);
 
 }

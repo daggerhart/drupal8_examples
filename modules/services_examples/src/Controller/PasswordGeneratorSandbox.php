@@ -6,8 +6,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Markup;
 use Drupal\services_examples\PasswordGeneratorInterface;
 use Drupal\services_examples\PasswordGeneratorSimple;
-use Drupal\services_examples\PasswordGeneratorCryptoSecure;
-use Drupal\services_examples\PasswordGeneratorUnambiguous;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -47,8 +45,11 @@ class PasswordGeneratorSandbox extends ControllerBase {
    * PasswordGeneratorSandbox constructor.
    *
    * @param \Drupal\services_examples\PasswordGeneratorSimple $password_generator_simple
+   *   Simple password generator service.
    * @param \Drupal\services_examples\PasswordGeneratorInterface $password_generator_crypto_secure
+   *   Crypto secure password generator service.
    * @param \Drupal\services_examples\PasswordGeneratorInterface $password_generator_unambiguous_crypto_secure
+   *   Unambiguous password generator service (decorated)
    */
   public function __construct(
     PasswordGeneratorSimple $password_generator_simple,
@@ -61,7 +62,10 @@ class PasswordGeneratorSandbox extends ControllerBase {
   }
 
   /**
+   * Page output.
+   *
    * @return array[]
+   *   Render array.
    */
   public function page() {
     return [

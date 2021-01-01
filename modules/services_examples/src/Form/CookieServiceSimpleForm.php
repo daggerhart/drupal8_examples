@@ -25,6 +25,7 @@ class CookieServiceSimpleForm extends FormBase {
    * CookieServiceSimpleForm constructor.
    *
    * @param \Drupal\services_examples\CookieServiceSimple $cookie_service_simple
+   *   Simple cookie service.
    */
   public function __construct(CookieServiceSimple $cookie_service_simple) {
     $this->cookieServiceSimple = $cookie_service_simple;

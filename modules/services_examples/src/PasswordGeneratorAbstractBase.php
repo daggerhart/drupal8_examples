@@ -33,6 +33,7 @@ abstract class PasswordGeneratorAbstractBase implements PasswordGeneratorInterfa
    * BasePasswordGenerator constructor.
    *
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   Core messenger.
    */
   public function __construct(MessengerInterface $messenger) {
     $this->messenger = $messenger;

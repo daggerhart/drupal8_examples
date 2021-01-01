@@ -66,6 +66,7 @@ class CookieServiceSimple implements EventSubscriberInterface {
    * Get the cookie's value.
    *
    * @return mixed
+   *   Cookie value.
    */
   public function getCookieValue() {
     // If we're mid-request and setting a new cookie value, return it. This

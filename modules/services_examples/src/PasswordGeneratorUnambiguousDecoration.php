@@ -3,7 +3,7 @@
 namespace Drupal\services_examples;
 
 /**
- * Class PasswordGeneratorUnambiguous.
+ * Class PasswordGeneratorUnambiguousDecoration.
  *
  * @package Drupal\services_examples
  */
@@ -20,6 +20,7 @@ class PasswordGeneratorUnambiguousDecoration implements PasswordGeneratorInterfa
    * PasswordGeneratorUnambiguousDecoration constructor.
    *
    * @param \Drupal\services_examples\PasswordGeneratorUnambiguous $password_generator_unambiguous
+   *   Service that is being decorated.
    */
   public function __construct(PasswordGeneratorUnambiguous $password_generator_unambiguous) {
     $this->innerService = $password_generator_unambiguous;
