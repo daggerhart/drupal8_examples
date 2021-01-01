@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\services_examples;
+namespace Drupal\cookie_services;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;

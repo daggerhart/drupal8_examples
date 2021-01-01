@@ -35,12 +35,3 @@ services:
     decorates: password_generator_unambiguous
     arguments:
       - '@password_generator_unambiguous_decoration.inner'
-
-  ## -- Cookies Services --
-
-  cookie_service_simple:
-    class: \Drupal\services_examples\CookieServiceSimple
-    arguments:
-      - '@request_stack'
-    tags:
-      - { name: 'event_subscriber' }

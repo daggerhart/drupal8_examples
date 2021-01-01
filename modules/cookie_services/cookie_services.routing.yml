@@ -1,0 +1,7 @@
+cookie_services.sandbox:
+  path: 'cookie-services-sandbox'
+  defaults:
+    _form: \Drupal\cookie_services\Form\CookieServiceSandbox
+    _title: 'Cookie Services Sandbox'
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,6 @@
+name: Cookies as Services
+type: module
+description: Module that shows creating services for managing cookies.
+core_version_requirement: ^8.8 || ^9
+package: Custom
+configure: cookie_services.sandbox

@@ -5,11 +5,3 @@ password_generator.sandbox:
     _title: 'Password Generator'
   requirements:
     _permission: 'access content'
-
-cookie_service.simple:
-  path: 'cookie-service-simple'
-  defaults:
-    _form: \Drupal\services_examples\Form\CookieServiceSimpleForm
-    _title: 'Cookie Service Simple'
-  requirements:
-    _permission: 'access content'

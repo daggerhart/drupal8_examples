@@ -1,0 +1,9 @@
+services:
+
+  # Basic example of cookie as a service.
+  cookie_service_simple:
+    class: \Drupal\cookie_services\CookieServiceSimple
+    arguments:
+      - '@request_stack'
+    tags:
+      - { name: 'event_subscriber' }
