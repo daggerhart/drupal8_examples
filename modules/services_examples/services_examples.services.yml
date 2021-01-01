@@ -28,6 +28,14 @@ services:
     class: \Drupal\services_examples\PasswordGeneratorUnambiguous
     parent: password_generator_abstract_base
 
+  # Example decorating a service.
+  password_generator_unambiguous_decoration:
+    class: \Drupal\services_examples\PasswordGeneratorUnambiguousDecoration
+    public: false
+    decorates: password_generator_unambiguous
+    arguments:
+      - '@password_generator_unambiguous_decoration.inner'
+
   ## -- Cookies Services --
 
   cookie_service_simple:

@@ -4,6 +4,7 @@ namespace Drupal\services_examples\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Markup;
+use Drupal\services_examples\PasswordGeneratorInterface;
 use Drupal\services_examples\PasswordGeneratorSimple;
 use Drupal\services_examples\PasswordGeneratorCryptoSecure;
 use Drupal\services_examples\PasswordGeneratorUnambiguous;
@@ -22,12 +23,12 @@ class PasswordGeneratorSandbox extends ControllerBase {
   protected $simple;
 
   /**
-   * @var \Drupal\services_examples\PasswordGeneratorCryptoSecure
+   * @var \Drupal\services_examples\PasswordGeneratorInterface
    */
   protected $crypto;
 
   /**
-   * @var \Drupal\services_examples\PasswordGeneratorUnambiguous
+   * @var \Drupal\services_examples\PasswordGeneratorInterface
    */
   protected $unambiguous;
 
@@ -46,13 +47,13 @@ class PasswordGeneratorSandbox extends ControllerBase {
    * PasswordGeneratorSandbox constructor.
    *
    * @param \Drupal\services_examples\PasswordGeneratorSimple $password_generator_simple
-   * @param \Drupal\services_examples\PasswordGeneratorCryptoSecure $password_generator_crypto_secure
-   * @param \Drupal\services_examples\PasswordGeneratorUnambiguous $password_generator_unambiguous_crypto_secure
+   * @param \Drupal\services_examples\PasswordGeneratorInterface $password_generator_crypto_secure
+   * @param \Drupal\services_examples\PasswordGeneratorInterface $password_generator_unambiguous_crypto_secure
    */
   public function __construct(
     PasswordGeneratorSimple $password_generator_simple,
-    PasswordGeneratorCryptoSecure $password_generator_crypto_secure,
-    PasswordGeneratorUnambiguous $password_generator_unambiguous_crypto_secure
+    PasswordGeneratorInterface $password_generator_crypto_secure,
+    PasswordGeneratorInterface $password_generator_unambiguous_crypto_secure
   ) {
     $this->simple = $password_generator_simple;
     $this->crypto = $password_generator_crypto_secure;

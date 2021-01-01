@@ -11,7 +11,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *
  * @package Drupal\services_examples
  */
-abstract class PasswordGeneratorAbstractBase {
+abstract class PasswordGeneratorAbstractBase implements PasswordGeneratorInterface {
 
   use StringTranslationTrait;
 
@@ -47,6 +47,18 @@ abstract class PasswordGeneratorAbstractBase {
   abstract public function setLogger(LoggerChannelFactoryInterface $logger_channel_factory);
 
   /**
+   * Get a random number.
+   *
+   * @param int|null $min
+   *   Number floor.
+   * @param int|null $max
+   *   Number ceiling.
+   *
+   * @return int
+   */
+  abstract public function getRandomNumber(int $min = 0, int $max = NULL);
+
+  /**
    * Return an associative array where each value is a list of characters that
    * can be used for password generation.
    *
@@ -62,23 +74,7 @@ abstract class PasswordGeneratorAbstractBase {
   }
 
   /**
-   * Get a random number.
-   *
-   * @param int|null $min
-   *   Number floor.
-   * @param int|null $max
-   *   Number ceiling.
-   *
-   * @return int
-   */
-  abstract public function getRandomNumber(int $min = NULL, int $max = NULL);
-
-  /**
-   * Generate a password.
-   *
-   * @param int $length
-   *
-   * @return string
+   * {@inheritDoc}
    */
   public function generatePassword($length = 16, $allowed_sets = []) {
     $sets = $this->getCharacterSets();
