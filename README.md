@@ -17,6 +17,12 @@
 
 [Related Blog Post](https://www.daggerhart.com/drupal-8-hooks-events-event-subscribers/)
 
+# Services & Dependency Injection
+
+1. [Dependency Injection Examples](modules/dependency_injection_examples)
+1. [Services Examples](modules/services_examples)
+1. [Calculator](modules/calculator) - More examples of services and dependency injection.
+
 # The most bare-minimum possible Drupal 8 module
 
 1. [Module](modules/blank_module)
