@@ -1,0 +1,6 @@
+name: Cats Api
+description: Retrieves data from the Cats API
+type: module
+core_version_requirement: ^8.8 || ^9
+package: Custom
+configure: cats_api.settings_form

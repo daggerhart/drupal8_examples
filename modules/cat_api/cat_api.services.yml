@@ -1,0 +1,13 @@
+services:
+  # Client factory service
+  cat_api.client_factory:
+    class: \Drupal\cat_api\Service\CatApiClientFactory
+    arguments:
+      - '@config.factory'
+      - '@http_client_factory'
+      - '@serialization.json'
+
+  # Create a service from another Service Factory
+  cat_api.client:
+    class: \Drupal\cat_api\Service\CatApiClient
+    factory: ['@cat_api.client_factory', 'create']

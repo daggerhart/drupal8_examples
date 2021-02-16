@@ -1,0 +1,24 @@
+cat_api.settings_form:
+  path: '/admin/config/services/cat-api'
+  defaults:
+    _form: '\Drupal\cat_api\Form\SettingsForm'
+    _title: 'Cat API Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+cat_api.browse_cats_page:
+  path: '/browse-cats/{breed_id?}'
+  defaults:
+    _controller: '\Drupal\cat_api\Controller\BrowseCatsPage::page'
+    _title: 'Cat Breed Browser'
+  requirements:
+    _permission: 'access content'
+
+cat_api.search_cats_page:
+  path: '/search-cats/{breed_id?}/{limit?}'
+  defaults:
+    _form: '\Drupal\cat_api\Form\SearchCatsForm'
+    _title: 'Cat Search'
+    limit: 3
+  requirements:
+    _permission: 'access content'

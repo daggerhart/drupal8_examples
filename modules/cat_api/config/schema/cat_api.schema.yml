@@ -1,0 +1,9 @@
+cat_api.settings:
+  type: config_object
+  mapping:
+    base_uri:
+      type: string
+      label: 'Base Url'
+    api_key:
+      type: string
+      label: 'API Key'
