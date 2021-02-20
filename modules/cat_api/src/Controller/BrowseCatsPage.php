@@ -3,6 +3,7 @@
 namespace Drupal\cat_api\Controller;
 
 use Drupal\cat_api\Service\CatApiClientInterface;
+use Drupal\cat_api\Service\CatBreedFactory;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Render\Markup;
@@ -26,6 +27,13 @@ class BrowseCatsPage implements ContainerInjectionInterface {
   private $catApiClient;
 
   /**
+   * Cat breed factory service.
+   *
+   * @var \Drupal\cat_api\Service\CatBreedFactory
+   */
+  private $catBreedFactory;
+
+  /**
    * Current request.
    *
    * @var \Symfony\Component\HttpFoundation\Request|null
@@ -36,10 +44,12 @@ class BrowseCatsPage implements ContainerInjectionInterface {
    * SearchPage constructor.
    *
    * @param \Drupal\cat_api\Service\CatApiClientInterface $cat_api_client
+   * @param \Drupal\cat_api\Service\CatBreedFactory $cat_breed_factory
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    */
-  public function __construct(CatApiClientInterface $cat_api_client, RequestStack $request_stack) {
+  public function __construct(CatApiClientInterface $cat_api_client, CatBreedFactory $cat_breed_factory, RequestStack $request_stack) {
     $this->catApiClient = $cat_api_client;
+    $this->catBreedFactory = $cat_breed_factory;
     $this->request = $request_stack->getCurrentRequest();
   }
 
@@ -49,6 +59,7 @@ class BrowseCatsPage implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('cat_api.client'),
+      $container->get('cat_api.breed_factory'),
       $container->get('request_stack')
     );
   }
@@ -97,27 +108,28 @@ class BrowseCatsPage implements ContainerInjectionInterface {
    *
    * @return array[]
    */
-  private function getBreedDetails($breed_id) {
+  private function getBreedDetails(string $breed_id) {
     $results = $this->catApiClient->get('images/search', [
       'breed_ids' => $breed_id,
     ]);
-    $breed = $results[0]['breeds'][0];
-    $details = [];
-    foreach (['temperament', 'description', 'alt_names'] as $key) {
-      $details[] = Markup::create("<strong>{$key}</strong>: {$breed[$key]}");
-    }
+
+    $cat_breed = $this->catBreedFactory->createFromSearchResult($results[0]);
+
     return [
       'name' => [
         '#type' => 'html_tag',
         '#tag' => 'h2',
-        '#value' => $breed['name'],
+        '#value' => $cat_breed->getName(),
       ],
       'details' => [
         '#theme' => 'item_list',
-        '#items' => $details,
+        '#items' => [
+          Markup::create("<strong>Temperament</strong>: {$cat_breed->getTemperament()}"),
+          Markup::create("<strong>Description</strong>: {$cat_breed->getDescription()}"),
+        ],
       ],
       'image' => [
-        '#markup' => Markup::create("<img src='{$results[0]['url']}' alt='{$breed['name']}'>")
+        '#markup' => $cat_breed->getPicture(),
       ],
     ];
   }

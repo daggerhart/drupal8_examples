@@ -3,6 +3,7 @@
 namespace Drupal\cat_api\Form;
 
 use Drupal\cat_api\Service\CatApiClientInterface;
+use Drupal\cat_api\Service\CatBreedFactory;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
@@ -25,12 +26,21 @@ class SearchCatsForm extends FormBase {
   private $catApiClient;
 
   /**
+   * Cat breed factory service.
+   *
+   * @var \Drupal\cat_api\Service\CatBreedFactory
+   */
+  private $catBreedFactory;
+
+  /**
    * SearchCatsForm constructor.
    *
    * @param \Drupal\cat_api\Service\CatApiClientInterface $cat_api_client
+   * @param \Drupal\cat_api\Service\CatBreedFactory $cat_breed_factory
    */
-  public function __construct(CatApiClientInterface $cat_api_client) {
+  public function __construct(CatApiClientInterface $cat_api_client, CatBreedFactory $cat_breed_factory) {
     $this->catApiClient = $cat_api_client;
+    $this->catBreedFactory = $cat_breed_factory;
   }
 
   /**
@@ -38,7 +48,8 @@ class SearchCatsForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('cat_api.client')
+      $container->get('cat_api.client'),
+      $container->get('cat_api.breed_factory')
     );
   }
 
@@ -110,7 +121,8 @@ class SearchCatsForm extends FormBase {
     $breeds = $this->catApiClient->get('breeds');
     $options = [];
     foreach ($breeds as $breed) {
-      $options[$breed['id']] = $breed['name'];
+      $cat_breed = $this->catBreedFactory->createFromBreedResult($breed);
+      $options[$cat_breed->getId()] = $cat_breed->getName();
     }
     return $options;
   }
@@ -131,7 +143,8 @@ class SearchCatsForm extends FormBase {
 
     $items = [];
     foreach ($results as $result) {
-      $items[] = Markup::create("<h3>{$result['breeds'][0]['name']}</h3><img src='{$result['url']}'>");
+      $cat_breed = $this->catBreedFactory->createFromSearchResult($result);
+      $items[] = Markup::create("<h3>{$cat_breed->getName()}</h3> {$cat_breed->getPicture()}");
     }
 
     return [

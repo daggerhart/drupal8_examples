@@ -3,6 +3,7 @@
 namespace Drupal\cat_api\Plugin\Block;
 
 use Drupal\cat_api\Service\CatApiClientInterface;
+use Drupal\cat_api\Service\CatBreedFactory;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Markup;
@@ -28,6 +29,13 @@ class CatApiRandomCat extends BlockBase implements ContainerFactoryPluginInterfa
   private $catApiClient;
 
   /**
+   * Cat breed factory service.
+   *
+   * @var \Drupal\cat_api\Service\CatBreedFactory
+   */
+  private $catBreedFactory;
+
+  /**
    * CatApiRandomCat constructor.
    *
    * @param array $configuration
@@ -36,9 +44,11 @@ class CatApiRandomCat extends BlockBase implements ContainerFactoryPluginInterfa
    * @param \Drupal\cat_api\Service\CatApiClientInterface $cat_api_client
    *   Cat API Client.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CatApiClientInterface $cat_api_client) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, CatApiClientInterface $cat_api_client, CatBreedFactory $cat_breed_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->catApiClient = $cat_api_client;
+    $this->catBreedFactory = $cat_breed_factory;
+
   }
 
   /**
@@ -49,7 +59,8 @@ class CatApiRandomCat extends BlockBase implements ContainerFactoryPluginInterfa
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('cat_api.client')
+      $container->get('cat_api.client'),
+      $container->get('cat_api.breed_factory')
     );
   }
 
@@ -57,13 +68,14 @@ class CatApiRandomCat extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritDoc}
    */
   public function build() {
-    $results = $this->catApiClient->get('images/search', [
-      'limit' => 1,
-    ]);
+    $breeds = $this->catApiClient->get('breeds');
+    shuffle($breeds);
+
+    $cat_breed = $this->catBreedFactory->createFromBreedResult($breeds[0]);
 
     return [
       'image' => [
-        '#markup' => Markup::create("<img src='{$results[0]['url']}' alt='{$results[0]['id']}'>")
+        '#markup' => $cat_breed->getPicture(),
       ],
     ];
   }
